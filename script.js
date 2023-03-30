@@ -9,6 +9,34 @@
         document.body.appendChild( renderer.domElement );
 
 
+        let leftArrow = false;
+        let rightArrow = false;
+        let upArrow = false;
+        let downArrow = false;
+
+        window.addEventListener('keydown', function(event) {
+        if (event.code === 'ArrowLeft') {
+            leftArrow = true;
+        } else if (event.code === 'ArrowRight') {
+            rightArrow = true;
+        } else if (event.code === 'ArrowUp') {
+            upArrow = true;
+        } else if (event.code === 'ArrowDown') {
+            downArrow = true;
+        }
+        });
+
+        window.addEventListener('keyup', function(event) {
+        if (event.code === 'ArrowLeft') {
+            leftArrow = false;
+        } else if (event.code === 'ArrowRight') {
+            rightArrow = false;
+        } else if (event.code === 'ArrowUp') {
+            upArrow = false;
+        } else if (event.code === 'ArrowDown') {
+            downArrow = false;
+        }
+        });
         // load 3d model
         let myObj;
         let loader = new THREE.ObjectLoader();
@@ -88,21 +116,41 @@
         camera.position.y = 60;
 
 
-        // app logic          
+       
         function update(){
+            //move car left or right based on arrow key presses
+            if (leftArrow && myObj.position.x > -20) {
+              myObj.position.x -= 0.1;
+              console.log(myObj.position.x);
+
+            } else if (rightArrow && myObj.position.x < 20) {
+              myObj.position.x += 0.1;
+              console.log(myObj.position.x);
+            }
+          
+            // move car forward or backward based on arrow key presses
+            if (upArrow) {
+                if(myObj.position.z){
+                    myObj.position.z -= 0.1;
+                }
+              } else if (downArrow) {
+                myObj.position.z += 0.1;
+              }
+              
+          
             camera.position.z -= 0.7;
-            cube.position.z -=0.4;
-      
+            cube.position.z -= 0.4;
+          
             if(camera.position.y > 2){
-                 myObj.position.z -= 0.719;
-                camera.position.y -=0.1;
-                camera.rotation.x +=0.0025;
+              myObj.position.z -= 0.719;
+              camera.position.y -=0.1;
+              camera.rotation.x +=0.0025;
             }
             if(!(camera.position.y > 2)){
-                div.style.display = "block";
-                myObj.position.z -= 0.7;
+              div.style.display = "block";
+              myObj.position.z -= 0.7;
             }
-        };
+          }
 
         // draw scene
         function  render(){
